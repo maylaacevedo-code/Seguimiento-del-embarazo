@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="es"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<link rel="manifest" href="manifest.webmanifest">
+<meta name="theme-color" content="#2d6a5e">
+<link rel="apple-touch-icon" href="icon-192.png">
+<title>Seguimiento nutricional en el embarazo</title>
+<style>
+:root{--bg:#f2f5f1;--sf:#fff;--ink:#1d2a2c;--mu:#5d6c6e;--ln:#d5dcd6;--ac:#2d6a5e;--acs:#e1eee9;--ok:#2e8b57;--wa:#c98a00;--ko:#c2403a;--okb:#e3f2e9;--wab:#faf0d6;--kob:#f9e1df;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#121a1b;--sf:#1a2527;--ink:#e6eeec;--mu:#9bacaa;--ln:#2e3d3f;--ac:#6fc0ae;--acs:#203833;--ok:#5fc48a;--wa:#e5b53d;--ko:#ec7a73;--okb:#1c3326;--wab:#3a3017;--kob:#3d2220;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#121a1b;--sf:#1a2527;--ink:#e6eeec;--mu:#9bacaa;--ln:#2e3d3f;--ac:#6fc0ae;--acs:#203833;--ok:#5fc48a;--wa:#e5b53d;--ko:#ec7a73;--okb:#1c3326;--wab:#3a3017;--kob:#3d2220;color-scheme:dark}
+*{box-sizing:border-box}html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.5 Figtree,system-ui,sans-serif}
+header{padding:28px 20px 8px;max-width:980px;margin:auto}
+h1{font:700 clamp(26px,5vw,38px)/1.15 Literata,Georgia,serif;margin:0 0 6px}
+h2{font:700 21px/1.2 Literata,Georgia,serif;margin:0 0 12px}
+.sub{color:var(--mu);margin:0}
+nav{display:flex;gap:6px;overflow-x:auto;padding:12px 20px;max-width:980px;margin:auto;position:sticky;top:env(safe-area-inset-top,0px);background:var(--bg);z-index:5}
+nav button{border:1px solid var(--ln);background:var(--sf);color:var(--ink);padding:8px 14px;border-radius:20px;font:inherit;cursor:pointer;white-space:nowrap}
+nav button[aria-selected=true]{background:var(--ac);color:var(--bg);border-color:var(--ac)}
+button:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid var(--ac);outline-offset:2px}
+main{max-width:980px;margin:auto;padding:8px 20px 60px}
+section{display:none;background:var(--sf);border:1px solid var(--ln);border-radius:12px;padding:20px}
+section.on{display:block}
+.g{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px 16px}
+label{display:flex;flex-direction:column;font-size:14px;color:var(--mu);gap:4px}
+input,select{font:inherit;color:var(--ink);background:var(--bg);border:1px solid var(--ln);border-radius:8px;padding:8px 10px;width:100%}
+.out{background:var(--acs);border-radius:8px;padding:8px 10px;color:var(--ink);font-weight:600;min-height:40px}
+.tag{display:inline-block;padding:2px 10px;border-radius:12px;font-size:13px;font-weight:600}
+.ok{background:var(--okb);color:var(--ok)}.wa{background:var(--wab);color:var(--wa)}.ko{background:var(--kob);color:var(--ko)}.nt{background:var(--acs);color:var(--mu)}
+table{width:100%;border-collapse:collapse;font-size:14px}
+th,td{text-align:left;padding:7px 8px;border-bottom:1px solid var(--ln);vertical-align:middle}
+th{color:var(--mu);font-weight:600}
+td input,td select{padding:5px 8px}
+.wrap{overflow-x:auto}
+.row{display:flex;gap:8px;flex-wrap:wrap;margin:14px 0 0}
+.btn{border:1px solid var(--ac);background:var(--ac);color:var(--bg);border-radius:8px;padding:8px 14px;font:inherit;cursor:pointer}
+.btn.s{background:transparent;color:var(--ac)}
+.dx{border-left:4px solid var(--ac);padding:4px 0 4px 14px;margin:14px 0;max-width:75ch}
+.dx p{margin:0 0 10px}
+ul.rec{padding-left:20px;max-width:75ch}ul.rec li{margin-bottom:6px}
+.note{font-size:13px;color:var(--mu);margin-top:16px}
+@media print{nav,.row,header .sub{display:none}section{display:block!important;border:0}}
+</style></head><body>
+<header><h1>Seguimiento nutricional en el embarazo</h1><p class="sub">Cargá los datos de la paciente y la app calcula IMC, ganancia de peso, riesgos, micronutrientes y el diagnóstico.</p></header>
+<nav role="tablist" id="tabs"></nav>
+<main>
+<section id="t0"><h2>Paciente</h2><div class="g" id="f-pac"></div><div class="g" style="margin-top:14px" id="o-pac"></div></section>
+<section id="t1"><h2>Registro de peso</h2>
+<div class="wrap"><table><thead><tr><th>Fecha</th><th>Semana</th><th>Peso (kg)</th><th>IMC</th><th>Ganancia</th><th>Estado</th><th></th></tr></thead><tbody id="peso"></tbody></table></div>
+<div class="row"><button class="btn s" id="addp">Agregar control</button></div>
+<div class="g" style="margin-top:16px" id="o-peso"></div></section>
+<section id="t2"><h2>Factores de riesgo y hábitos</h2><div class="g" id="f-riesgo"></div>
+<h2 style="margin-top:22px">Factores calculados</h2><div class="wrap"><table><tbody id="riesgos"></tbody></table></div>
+<h2 style="margin-top:22px">Evaluación alimentaria</h2><div class="g" id="f-eval"></div></section>
+<section id="t3"><h2>Laboratorio</h2><div class="wrap"><table><thead><tr><th>Parámetro</th><th>Valor</th><th>Referencia</th><th>Interpretación</th></tr></thead><tbody id="labs"></tbody></table></div></section>
+<section id="t4"><h2>Micronutrientes</h2><div class="wrap"><table><thead><tr><th>Nutriente</th><th>Suplemento/día</th><th>Dieta/día</th><th>Total</th><th>IDR embarazo</th><th>Estado</th></tr></thead><tbody id="micro"></tbody></table></div></section>
+<section id="t5"><h2>Diagnóstico</h2><div class="wrap"><table><thead><tr><th>Indicador</th><th>Valor</th><th>Estado</th></tr></thead><tbody id="semaforo"></tbody></table></div>
+<h2 style="margin-top:22px">Diagnóstico nutricional integral</h2><div class="dx" id="dx"></div>
+<h2>Recomendaciones</h2><ul class="rec" id="rec"></ul>
+<div class="row"><button class="btn" onclick="print()">Imprimir o guardar PDF</button></div>
+<p class="note">Herramienta educativa. No reemplaza el criterio clínico del profesional. Referencias: IOM 2009 (ganancia de peso), Calvo et al. 2009 (IMC por semana), OMS (IMC adulto).</p></section>
+<div class="row" style="padding:0"><button class="btn s" id="ej">Cargar ejemplo</button><button class="btn s" id="lim">Paciente nueva</button></div>
+</main>
+<script>
+const $=s=>document.querySelector(s),KEY='seg-emb-v1';
+const EJ={nombre:'Candela Martínez',edad:30,fum:'2025-09-07',fecha:'2026-05-20',peso0:60,talla:1.6,menarquia:12,mesesParto:12,partos:1,sis:120,dia:80,
+fuma:'No',alcohol:'No',meds:'No',preex:'No',actividad:'Yoga 3 veces por semana',
+nauseas:'No',apetito:'Antojos por comidas avinagradas',restric:'Sin alergias ni intolerancias',sodio:'Alto',vasos:5,ultra:'Frecuente',harinas:'Sí',
+pesos:[{f:'2025-10-14',p:62.3},{f:'2026-02-19',p:69.8},{f:'2026-05-20',p:77.1}],
+lab:{hb:12,hto:30,fer:9,glu:90,ptog:150,col:180,prot:7,tsh:2,pu:280,ca:8.8},
+mic:{fol:[500,400],fe:[0,23],ca:[0,1100],mg:[0,300],vd:[200,600],i:[0,250],zn:[0,9],b12:[1,1],b6:[0,2],b1:[0,2],b2:[0,1],va:[0,800],o3:[150,50]}};
+const VACIA={nombre:'',edad:'',fum:'',fecha:new Date().toISOString().slice(0,10),peso0:'',talla:'',menarquia:'',mesesParto:'',partos:0,sis:'',dia:'',fuma:'No',alcohol:'No',meds:'No',preex:'No',actividad:'',nauseas:'No',apetito:'',restric:'',sodio:'Normal',vasos:'',ultra:'Ocasional',harinas:'No',pesos:[],lab:{hb:'',hto:'',fer:'',glu:'',ptog:'',col:'',prot:'',tsh:'',pu:'',ca:''},mic:Object.fromEntries(Object.keys(EJ.mic).map(k=>[k,[0,0]]))};
+let S;try{S=JSON.parse(localStorage.getItem(KEY))}catch(e){}S=S||structuredClone(EJ);
+const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}};
+const BAJO=[20,20.1,20.2,20.3,20.4,20.5,20.7,20.8,20.9,21.1,21.2,21.4,21.7,21.9,22,22.1,22.4,22.6,22.8,22.9,23,23.1,23.3,23.5,23.7,23.8,24,24.1,24.3,24.4,24.5,24.6,24.7],
+NORM=[27.1,27.2,27.4,27.5,27.7,27.8,27.9,28,28.2,28.5,28.8,29,29.2,29.4,29.7,29.8,30,30.1,30.4,30.7,30.9,31,31.2,31.5,31.7,31.9,32,32.1,32.3,32.4,32.5,32.6,32.7],
+SOBRE=[35.7,35.7,35.7,35.7,35.8,35.9,36,36.1,36.3,36.5,36.7,36.9,37,37.3,37.5,37.7,37.8,38,38.2,38.4,38.5,38.7,38.8,38.9,39,39.2,39.3,39.4,39.5,39.6,39.6,39.6,39.6];
+const CAT=[{n:'Bajo peso',t:[12.5,18],w:[.44,.58]},{n:'Peso normal',t:[11.5,16],w:[.35,.5]},{n:'Sobrepeso',t:[7,11.5],w:[.23,.33]},{n:'Obesidad',t:[5,9],w:[.17,.27]}];
+const catIdx=i=>i<18.5?0:i<25?1:i<30?2:3;
+const f1=(n,d=1)=>isFinite(n)?n.toFixed(d).replace('.',','):'–';
+const tag=(t,c)=>`<span class="tag ${c}">${t}</span>`;
+const sem=(c)=>({ok:'ok',wa:'wa',ko:'ko',nt:'nt'}[c]);
+const wk=(f)=>S.fum&&f?Math.floor((new Date(f)-new Date(S.fum))/6048e5):NaN;
+function imcGest(i,w){const k=Math.min(Math.max(w,9),41)-9;return i<=BAJO[k]?['Bajo peso','wa']:i<=NORM[k]?['Normal','ok']:i<=SOBRE[k]?['Sobrepeso','wa']:['Obesidad','ko']}
+function rango(ci,w){const c=CAT[ci];const a=Math.min(w,13)/13;let lo=.5*a,hi=2*a;if(w>13){lo+=(w-13)*c.w[0];hi+=(w-13)*c.w[1]}return[lo,hi]}
+function estGan(g,ci,w){const[lo,hi]=rango(ci,w);return g<lo-.001?['Insuficiente','wa']:g>hi+.001?['Excesiva','ko']:['Adecuada','ok']}
+const LABS=[['hb','Hemoglobina (g/dL)',11,null,'≥ 11'],['hto','Hematocrito (%)',33,null,'≥ 33'],['fer','Ferritina (ng/mL)',15,150,'15 – 150'],['glu','Glucemia en ayunas (mg/dL)',70,92,'70 – 92'],['ptog','Glucemia PTOG 2 h (mg/dL)',null,152.99,'< 153 (DG si ≥ 153)'],['col','Colesterol total (mg/dL)',null,199.99,'< 200'],['prot','Proteínas totales (g/dL)',6.5,8.5,'6,5 – 8,5'],['tsh','TSH (µUI/mL)',.1,2.5,'0,1 – 2,5 (1er trim.)'],['pu','Proteinuria (mg/24 h)',null,299.99,'< 300'],['ca','Calcio sérico (mg/dL)',8.5,10.5,'8,5 – 10,5']];
+const labEst=(v,lo,hi)=>v===''||v==null?['Sin dato','nt']:(lo!=null&&v<lo)?['Bajo','wa']:(hi!=null&&v>hi)?['Alto','ko']:['Normal','ok'];
+const MIC=[['fol','Ácido fólico (µg)',600],['fe','Hierro (mg)',27],['ca','Calcio (mg)',1000],['mg','Magnesio (mg)',350],['vd','Vitamina D (UI)',600],['i','Yodo (µg)',220],['zn','Zinc (mg)',11],['b12','Vitamina B12 (µg)',2.6],['b6','Vitamina B6 (mg)',1.9],['b1','Vitamina B1 (mg)',1.4],['b2','Vitamina B2 (mg)',1.4],['va','Vitamina A (µg)',770],['o3','Omega-3 (mg)',200]];
+const inp=(l,k,t='text',o)=>`<label>${l}${o?`<select data-k="${k}">${o.map(x=>`<option${S[k]==x?' selected':''}>${x}</option>`).join('')}</select>`:`<input data-k="${k}" type="${t}" step="any" value="${S[k]??''}">`}</label>`;
+const SN=['No','Sí'];
+function build(){
+$('#f-pac').innerHTML=inp('Nombre y apellido','nombre')+inp('Edad (años)','edad','number')+inp('Fecha de última menstruación','fum','date')+inp('Fecha del control','fecha','date')+inp('Peso pregestacional (kg)','peso0','number')+inp('Talla (m)','talla','number');
+$('#f-riesgo').innerHTML=inp('Edad de menarquía','menarquia','number')+inp('Meses desde el último parto','mesesParto','number')+inp('Partos previos','partos','number')+inp('Presión sistólica (mmHg)','sis','number')+inp('Presión diastólica (mmHg)','dia','number')+inp('Fuma','fuma','text',SN)+inp('Consume alcohol','alcohol','text',SN)+inp('Consume medicamentos','meds','text',SN)+inp('Enfermedades preexistentes','preex','text',SN)+inp('Actividad física','actividad');
+$('#f-eval').innerHTML=inp('Náuseas / vómitos','nauseas','text',SN)+inp('Modificaciones en el apetito','apetito')+inp('Restricciones alimentarias','restric')+inp('Consumo de sodio','sodio','text',['Normal','Alto'])+inp('Vasos de agua por día','vasos','number')+inp('Ultraprocesados','ultra','text',['Raro','Ocasional','Frecuente'])+inp('Harinas refinadas frecuentes','harinas','text',SN);
+$('#labs').innerHTML=LABS.map(l=>`<tr><td>${l[1]}</td><td><input data-l="${l[0]}" type="number" step="any" value="${S.lab[l[0]]}"></td><td>${l[4]}</td><td id="l-${l[0]}"></td></tr>`).join('');
+$('#micro').innerHTML=MIC.map(m=>`<tr><td>${m[1]}</td><td><input data-m="${m[0]}" data-i="0" type="number" step="any" value="${S.mic[m[0]][0]}"></td><td><input data-m="${m[0]}" data-i="1" type="number" step="any" value="${S.mic[m[0]][1]}"></td><td id="mt-${m[0]}"></td><td>${String(m[2]).replace('.',',')}</td><td id="me-${m[0]}"></td></tr>`).join('');
+pesoRows()}
+function pesoRows(){$('#peso').innerHTML=S.pesos.map((r,i)=>`<tr><td><input type="date" data-p="${i}" data-f="f" value="${r.f}"></td><td id="pw${i}"></td><td><input type="number" step="any" data-p="${i}" data-f="p" value="${r.p}"></td><td id="pi${i}"></td><td id="pg${i}"></td><td id="pe${i}"></td><td><button class="btn s" data-del="${i}" aria-label="Quitar control">Quitar</button></td></tr>`).join('')||'<tr><td colspan="7">Todavía no hay controles. Agregá el primero.</td></tr>'}
+let D={};
+function calc(){
+const w=wk(S.fecha),tri=w<14?'1er trimestre':w<28?'2do trimestre':'3er trimestre',imc0=S.peso0/(S.talla**2),ci=catIdx(imc0),c=CAT[ci];
+const fpp=S.fum?new Date(new Date(S.fum).getTime()+280*864e5).toLocaleDateString('es-AR',{timeZone:'UTC'}):'–';
+const box=(l,v)=>`<label>${l}<div class="out">${v}</div></label>`;
+$('#o-pac').innerHTML=box('Edad gestacional',isFinite(w)?w+' semanas':'–')+box('Trimestre',isFinite(w)?tri:'–')+box('Fecha probable de parto',fpp)+box('IMC pregestacional',f1(imc0)+' · '+c.n);
+const last=S.pesos.length?[...S.pesos].sort((a,b)=>a.f<b.f?-1:1).at(-1):{p:S.peso0,f:S.fecha};
+const pa=+last.p,wa=wk(last.f),ia=pa/(S.talla**2),ga=pa-S.peso0;
+const ig=isFinite(wa)&&ia?imcGest(ia,wa):['–','nt'],eg=isFinite(wa)?estGan(ga,ci,wa):['–','nt'],[lo,hi]=isFinite(wa)?rango(ci,wa):[NaN,NaN];
+S.pesos.forEach((r,i)=>{const ww=wk(r.f),ii=r.p/(S.talla**2),g=r.p-S.peso0,e=isFinite(ww)?estGan(g,ci,ww):['–','nt'];
+$('#pw'+i).textContent=isFinite(ww)?ww:'–';$('#pi'+i).textContent=f1(ii);$('#pg'+i).textContent=f1(g)+' kg';$('#pe'+i).innerHTML=tag(e[0],e[1])})
+$('#o-peso').innerHTML=box('Ganancia total esperada al término',`${f1(c.t[0])} – ${f1(c.t[1])} kg`)+box('Esperada a la semana '+(isFinite(wa)?wa:'–'),`${f1(lo)} – ${f1(hi)} kg`)+box('Ganancia actual',f1(ga)+' kg')+box('Estado de la ganancia',tag(eg[0],eg[1]))+box('IMC gestacional (Calvo)',f1(ia)+' · '+ig[0]);
+// riesgos
+const eg0=S.edad-S.menarquia,ri=[['Edad ginecológica',eg0+' años',eg0<5],['Embarazo precoz (< 18 años)',S.edad<18?'Sí':'No',S.edad<18],['Embarazo tardío (> 35 años)',S.edad>35?'Sí':'No',S.edad>35],['Corto intervalo intergenésico (≤ 18 meses)',S.mesesParto===''||S.partos<1?'No aplica':(S.mesesParto<=18?'Sí':'No'),S.partos>=1&&S.mesesParto!==''&&S.mesesParto<=18],['Alta paridad (≥ 4 partos)',S.partos>=4?'Sí':'No',S.partos>=4],['Baja talla materna (< 1,50 m)',S.talla<1.5?'Sí':'No',S.talla<1.5]];
+const L=S.lab,hta=S.sis>=140||S.dia>=90,hipo=S.sis&&S.dia&&S.sis<90&&S.dia<60,dg=L.ptog>=153||L.glu>92,anem=(L.fer!==''&&L.fer<15)||(L.hb!==''&&L.hb<11),pre=hta&&L.pu>=300;
+ri.push(['Hipertensión',hta?'Sí':'No',hta],['Hipotensión',hipo?'Sí':'No',hipo],['Diabetes gestacional',dg?'Posible':'No',dg],['Preeclampsia',pre?'Posible':'Sin signos',pre],['Anemia ferropénica',anem?'Sí':'No',anem]);
+$('#riesgos').innerHTML=ri.map(r=>`<tr><td>${r[0]}</td><td>${r[1]}</td><td>${r[2]?tag('Factor de riesgo','ko'):tag('Sin riesgo','ok')}</td></tr>`).join('');
+LABS.forEach(l=>{const e=labEst(S.lab[l[0]],l[2],l[3]);$('#l-'+l[0]).innerHTML=tag(e[0],e[1])});
+const mic={};MIC.forEach(m=>{const t=(+S.mic[m[0]][0]||0)+(+S.mic[m[0]][1]||0),ok=t>=m[2];mic[m[0]]=ok;$('#mt-'+m[0]).textContent=f1(t,t%1?1:0);$('#me-'+m[0]).innerHTML=tag(ok?'Suficiente':'Insuficiente',ok?'ok':'ko')});
+const lg=k=>labEst(L[k],...LABS.find(x=>x[0]==k).slice(2,4));
+const insuf=MIC.filter(m=>!mic[m[0]]).map(m=>m[1].replace(/ \(.*/,''));
+const sd=(l,v,e)=>`<tr><td>${l}</td><td>${v}</td><td>${tag(e[0],e[1])}</td></tr>`;
+$('#semaforo').innerHTML=sd('IMC pregestacional (kg/m²)',f1(imc0),[c.n,ci==1?'ok':'wa'])+sd('IMC gestacional (kg/m²)',f1(ia),ig)+sd('Ganancia de peso (kg)',f1(ga),eg)+sd('Hemoglobina (g/dL)',L.hb,lg('hb'))+sd('Ferritina (ng/mL)',L.fer,lg('fer'))+sd('Glucemia en ayunas (mg/dL)',L.glu,lg('glu'))+sd('PTOG 2 h (mg/dL)',L.ptog,lg('ptog'))+sd('Proteinuria (mg/24 h)',L.pu,lg('pu'))+sd('TSH (µUI/mL)',L.tsh,lg('tsh'))+sd('Corto intervalo intergenésico',ri[3][1],ri[3][2]?['Factor de riesgo','ko']:['Sin riesgo','ok'])+sd('Consumo de sodio',S.sodio,S.sodio=='Alto'?['Alto','ko']:['Normal','ok'])+sd('Ultraprocesados',S.ultra,S.ultra=='Frecuente'?['Frecuente','ko']:['Aceptable','ok'])+sd('Hierro (mg/día)',(+S.mic.fe[0])+(+S.mic.fe[1]),mic.fe?['Suficiente','ok']:['Insuficiente','ko'])+sd('Ácido fólico (µg/día)',(+S.mic.fol[0])+(+S.mic.fol[1]),mic.fol?['Suficiente','ok']:['Insuficiente','ko'])+sd('Vitamina B12 (µg/día)',f1((+S.mic.b12[0])+(+S.mic.b12[1])),mic.b12?['Suficiente','ok']:['Insuficiente','ko']);
+const mal=[];if(S.sodio=='Alto')mal.push('consumo de sodio alto');if(S.vasos!==''&&S.vasos<8)mal.push('hidratación de '+S.vasos+' vasos por día');if(S.ultra=='Frecuente')mal.push('preferencia por ultraprocesados');if(S.harinas=='Sí')mal.push('consumo frecuente de harinas refinadas');
+const patron=mal.length?'a mejorar':'adecuado';
+$('#dx').innerHTML=`<p>${S.nombre||'La paciente'}, de ${S.edad} años, cursa el ${tri} de gestación (semana ${isFinite(w)?w:'–'}). Su IMC pregestacional fue ${f1(imc0)} kg/m² (${c.n.toLowerCase()}). La ganancia de peso actual es de ${f1(ga)} kg; para su categoría se esperan ${f1(lo)} a ${f1(hi)} kg a esta semana y ${f1(c.t[0])} a ${f1(c.t[1])} kg al término, por lo que la ganancia es <b>${eg[0].toLowerCase()}</b>. Su IMC gestacional es ${f1(ia)} kg/m² (${ig[0].toLowerCase()}).</p>
+<p>En el laboratorio, la ferritina es ${L.fer} ng/mL (${lg('fer')[0].toLowerCase()}) y la hemoglobina ${L.hb} g/dL (${lg('hb')[0].toLowerCase()}). ${dg?'Hay valores compatibles con diabetes gestacional.':'No hay diabetes gestacional.'} ${hta?'Hay valores de presión elevados.':'No se registraron valores de presión elevados.'} ${ri[3][2]?`Como factor de riesgo se destaca el corto intervalo entre embarazos (${S.mesesParto} meses desde el parto anterior).`:''}</p>
+<p>Micronutrientes insuficientes: ${insuf.length?insuf.join(', ').toLowerCase():'ninguno'}. El patrón alimentario es <b>${patron}</b>${mal.length?': '+mal.join(', ')+'.':'.'}</p>`;
+const R=[];
+if(!mic.fe||L.fer<15)R.push('Aumentar carnes rojas y legumbres como lentejas, acompañadas de vitamina C (jugo de limón, tomate o cítricos) para mejorar la absorción de hierro. Consultar con el obstetra por suplementación con hierro.');
+if(S.sodio=='Alto')R.push('Reducir el sodio (menos de 2000 mg/día): sacar el salero de la mesa, evitar embutidos y caldos concentrados. Es un factor a vigilar por el riesgo de preeclampsia.');
+if(S.harinas=='Sí'||S.ultra=='Frecuente')R.push('Cambiar harinas refinadas y ultraprocesados por cereales y harinas integrales para aumentar fibra, zinc y ácido fólico.');
+if(eg[0]=='Excesiva')R.push('Seguir la curva de peso en el tramo final del embarazo para evitar progresión a obesidad o diabetes gestacional.');
+if(eg[0]=='Insuficiente')R.push('Reforzar la ingesta energética y proteica, con controles de peso más frecuentes.');
+if(!mic.zn||!mic.mg)R.push('Sumar semillas, frutos secos, legumbres y cereales integrales (zinc y magnesio).');
+if(!mic.b12)R.push('Incluir lácteos, huevo y carnes (vitamina B12) y evaluar suplementación.');
+if(!mic.b2)R.push('Sumar lácteos, huevo y vegetales de hoja verde (vitamina B2).');
+if(S.vasos!==''&&S.vasos<8)R.push('Aumentar la hidratación a 8 vasos de agua por día o más.');
+if(ri[3][2])R.push('El intervalo corto entre embarazos exige reforzar reservas de hierro y folato.');
+$('#rec').innerHTML=(R.length?R:['Sin ajustes necesarios. Mantener los hábitos actuales y los controles.']).map(x=>`<li>${x}</li>`).join('');
+save()}
+const tabs=['Paciente','Peso','Riesgos','Laboratorio','Micronutrientes','Diagnóstico'];
+$('#tabs').innerHTML=tabs.map((t,i)=>`<button role="tab" data-t="${i}">${t}</button>`).join('');
+function show(i){document.querySelectorAll('section').forEach((s,j)=>s.classList.toggle('on',i==j));document.querySelectorAll('#tabs button').forEach((b,j)=>b.setAttribute('aria-selected',i==j))}
+$('#tabs').onclick=e=>{if(e.target.dataset.t)show(+e.target.dataset.t)};
+document.addEventListener('input',e=>{const d=e.target.dataset,v=e.target.type=='number'?(e.target.value===''?'':+e.target.value):e.target.value;
+if(d.k)S[d.k]=v;else if(d.l)S.lab[d.l]=v;else if(d.m)S.mic[d.m][d.i]=v;else if(d.p!=null)S.pesos[d.p][d.f]=v;calc()});
+document.addEventListener('click',e=>{if(e.target.dataset.del!=null){S.pesos.splice(+e.target.dataset.del,1);pesoRows();calc()}});
+$('#addp').onclick=()=>{S.pesos.push({f:S.fecha,p:''});pesoRows();calc()};
+$('#ej').onclick=()=>{S=structuredClone(EJ);build();calc()};
+$('#lim').onclick=()=>{if(confirm('¿Empezar con una paciente nueva? Se borran los datos cargados.')){S=structuredClone(VACIA);build();calc()}};
+build();show(0);calc();
+if('serviceWorker' in navigator)addEventListener('load',()=>navigator.serviceWorker.register('sw.js').catch(()=>{}));
+</script></body></html>
